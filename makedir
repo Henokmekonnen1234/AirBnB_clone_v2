@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mkdir "$1"
+touch "$1/README.md"
+echo "$2" > "$1/README.md"
+cd "$1"
