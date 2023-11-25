@@ -1,72 +1,65 @@
 #!/usr/bin/python3
-"""This module defines a class to manage file storage for hbnb clone"""
+"""Module file_storage
+
+This Module contains a definition for FileStorage Class
+"""
+
+import importlib
 import json
+import os
+import re
 
 
 class FileStorage:
-    """This class manages storage of hbnb models in JSON format"""
-    __file_path = 'file.json'
+    """FileStorage Class
+
+    Attributes:
+        __file_path (str): string - path to the JSON file
+        __objects (dict): A dictionary of instantiated objects.
+
+    """
+    __file_path = "file.json"
     __objects = {}
 
     def all(self, cls=None):
-        """Returns a dictionary of models currently in storage"""
-        try:
-            if cls is None:
-                return FileStorage.__objects
-            else:
-                cls_obj = {}
-                for key, value in FileStorage.__objects.items():
-                    if cls.__name__ == key.split(".")[0]:
-                        cls_obj[key] = value
-                return cls_obj
-        except Exception as e:
-            pass
+        """returns the dictionary __objects"""
+        if cls is None:
+            return {k: v for k, v in self.__objects.items()}
+        return {k: v for k, v in self.__objects.items() if type(v) == cls}
 
     def new(self, obj):
-        """Adds new object to storage dictionary"""
-        self.all().update({obj.to_dict()['__class__'] + '.' +
-                          obj.id: obj})
+        """Set in __objects obj with key <obj_class_name>.id"""
+        self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
 
     def save(self):
-        """Saves storage dictionary to file"""
-        with open(FileStorage.__file_path, 'w') as f:
-            temp = {}
-            temp.update(FileStorage.__objects)
-            for key, val in temp.items():
-                temp[key] = val.to_dict()
-            json.dump(temp, f)
+        """Serialize __objects to the JSON file __file_path."""
+        with open(self.__file_path, 'w') as f:
+            json.dump({k: v.to_dict() for k, v in self.__objects.items()}, f)
 
     def reload(self):
-        """Loads storage dictionary from file"""
-        from models.base_model import BaseModel
-        from models.user import User
-        from models.place import Place
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.review import Review
-
-        classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
-        try:
-            temp = {}
-            with open(FileStorage.__file_path, 'r') as f:
-                temp = json.load(f)
-                for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
-        except FileNotFoundError:
-            pass
+        """Deserialize the JSON file __file_path to __objects, if it exists."""
+        path = self.__file_path
+        if (os.path.isfile(path) and os.path.getsize(path) > 0):
+            with open(self.__file_path, 'r') as f:
+                self.__objects = {
+                    k: self.get_class(k.split(".")[0])(**v)
+                    for k, v in json.load(f).items()
+                }
 
     def delete(self, obj=None):
-        """this will delete the given object"""
-        try:
-            if obj is not None:
-                key = f"{obj.__class__.__name__}.{obj.id}"
-                if key in FileStorage.__objects.keys():
-                    del FileStorage.__objects[key]
-                    self.save()
-        except Exception as e:
-            pass
+        """Deletes an object"""
+        if obj is None:
+            return None
+        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+        return self.__objects.pop(key, None)
+
+    def get_class(self, name):
+        """ returns a class from models module using its name"""
+        sub_module = re.sub('(?!^)([A-Z]+)', r'_\1', name).lower()
+        module = importlib.import_module(
+            "models.{sub_module}".format(sub_module))
+        return getattr(module, name)
+
+    def close(self):
+        """ calls the reload method """
+        self.reload()
