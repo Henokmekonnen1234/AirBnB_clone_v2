@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
+from os import environ
 from sqlalchemy import Column, String, Integer, ForeignKey, Float
 from sqlalchemy.orm import relationship
 
@@ -20,4 +21,16 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=False)
     user = relationship("User", back_populates="places")
     cities = relationship("City", back_populates="places")
-    amenity_ids = []
+    if environ.get("HBNB_TYPE_STORAGE") == "db":
+        reviews = relationship("Review", back_populates="place",
+                               cascade="all, delete-orphan")
+    else:
+        @property
+        def reviews(self):
+            """returns the value of foreign key or key of Place
+                and the environment varible value must be different
+                from db
+            """
+            from models import storage
+            reviews = [v for _, v in storage.all(Review).items()
+                       if v.place_id == self.id]

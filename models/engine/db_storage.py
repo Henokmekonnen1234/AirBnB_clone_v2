@@ -8,6 +8,7 @@ from models.state import State
 from models.city import City
 from models.user import User
 from models.place import Place
+from models.review import Review
 from os import environ
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -56,7 +57,8 @@ class DBStorage:
                         "STATES": State,
                         "CITIES": City,
                         "USERS": User,
-                        "PLACES": Place
+                        "PLACES": Place,
+                        "REVIEWS": Review
                       }
             all_value = {}
             result = []

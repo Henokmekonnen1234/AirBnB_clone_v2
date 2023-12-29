@@ -123,13 +123,10 @@ class HBNBCommand(cmd.Cmd):
             elif class_name not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            args = args[5:]
-            key_value_pair = args.split(class_name, 1)
             key_value_pair = args.split(" ")
             all_values = {}
-            print(key_value_pair)
             for pair in key_value_pair:
-                if pair:
+                if "=" in pair:
                     key, value = pair.split("=")
                     value = int(value) if value.isdigit() else \
                         float(value) if '.' in value and\
