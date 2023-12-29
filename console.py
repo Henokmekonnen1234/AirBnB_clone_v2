@@ -130,8 +130,8 @@ class HBNBCommand(cmd.Cmd):
                 if pair:
                     key, value = pair.split("=")
                     value = int(value) if value.isdigit() else \
-                        float(value) if '.' in value else \
-                        value.strip("\"")
+                        float(value) if '.' in value and\
+                        value.isnumeric() else value.strip("\"")
                     all_values[key] = value
             new_instance = HBNBCommand.classes[class_name]()
             new_dict = new_instance.to_dict()

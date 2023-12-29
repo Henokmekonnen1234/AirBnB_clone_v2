@@ -6,6 +6,7 @@ This class will handle the database storage
 from models.base_model import Base
 from models.state import State
 from models.city import City
+from models.user import User
 from os import environ
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -50,7 +51,11 @@ class DBStorage:
             dict: all queries returned as dictionary
         """
         try:
-            classes = {"STATES": State, "CITIES": City}
+            classes = {
+                        "STATES": State,
+                        "CITIES": City,
+                        "USERS": User
+                      }
             all_value = {}
             result = []
             if cls:
@@ -92,6 +97,7 @@ class DBStorage:
         except Exception as e:
             print("Sorry error occurred")
             pass
+
     def delete(self, obj=None):
         """It will delete the given instance from the database
 
