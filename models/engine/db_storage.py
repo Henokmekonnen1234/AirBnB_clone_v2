@@ -7,6 +7,7 @@ from models.base_model import Base
 from models.state import State
 from models.city import City
 from models.user import User
+from models.place import Place
 from os import environ
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -33,11 +34,11 @@ class DBStorage:
                 mysql_url = "mysql+mysqldb://{}:{}@{}:3306/{}".format(
                              db_user, db_pwd, db_host, db_name)
                 self.__engine = create_engine(mysql_url, pool_pre_ping=True)
-            if environ.get("HBNB_ENV") is "test":
-                Base.metadata.reflect(bind=engine)
-                Base.metadata.drop_all(bind=engine)
+            if environ.get("HBNB_ENV") == "test":
+                Base.metadata.reflect(bind=self.__engine)
+                Base.metadata.drop_all(bind=self.__engine)
         except Exception as e:
-            print("Sorry error occurred")
+            print("Sorry error occurred ", e)
             pass
 
     def all(self, cls=None):
@@ -54,7 +55,8 @@ class DBStorage:
             classes = {
                         "STATES": State,
                         "CITIES": City,
-                        "USERS": User
+                        "USERS": User,
+                        "PLACES": Place
                       }
             all_value = {}
             result = []
@@ -73,7 +75,7 @@ class DBStorage:
                     all_value[key] = value
             return all_value
         except Exception as e:
-            print("Sorry error occurred")
+            print("Sorry error occurred ", e)
             return {}
 
     def new(self, obj):
@@ -86,7 +88,7 @@ class DBStorage:
             if obj is not None:
                 self.__session.add(obj)
         except Exception as e:
-            print("Sorry error occurred")
+            print("Sorry error occurred ", e)
             pass
 
     def save(self):
@@ -95,7 +97,7 @@ class DBStorage:
         try:
             self.__session.commit()
         except Exception as e:
-            print("Sorry error occurred")
+            print("Sorry error occurred ", e)
             pass
 
     def delete(self, obj=None):
@@ -108,7 +110,7 @@ class DBStorage:
             if obj is not None:
                 self.__session.delete(obj)
         except Exception as e:
-            print("Sorry error occurred")
+            print("Sorry error occurred ", e)
             pass
 
     def reload(self):
@@ -121,4 +123,4 @@ class DBStorage:
                                      expire_on_commit=False))
             self.__session = Session()
         except Exception as e:
-            print("Sorry error occurred")
+            print("Sorry error occurred ", e)

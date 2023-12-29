@@ -124,14 +124,18 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
                 return
             args = args[5:]
+            key_value_pair = args.split(class_name, 1)
             key_value_pair = args.split(" ")
             all_values = {}
+            print(key_value_pair)
             for pair in key_value_pair:
                 if pair:
                     key, value = pair.split("=")
                     value = int(value) if value.isdigit() else \
                         float(value) if '.' in value and\
                         value.isnumeric() else value.strip("\"")
+                    if type(value) == str and "_" in value:
+                        value = value.replace("_", " ")
                     all_values[key] = value
             new_instance = HBNBCommand.classes[class_name]()
             new_dict = new_instance.to_dict()
@@ -141,7 +145,8 @@ class HBNBCommand(cmd.Cmd):
             storage.save()
             print(new_instance.id)
         except Exception as e:
-            print("the error", e)
+            print("Sorry error occurred ",e)
+            pass
 
     def help_create(self):
         """ Help information for the create method """
@@ -204,7 +209,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del (storage.all()[key])
+            storage.delete(storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
