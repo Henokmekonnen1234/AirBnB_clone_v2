@@ -49,8 +49,9 @@ def clang(text):
     return "C {}".format(text)
 
 
-@app.route("/python/<text>", defaults={"text": "is cool"})
-def pthon(text):
+@app.route("/python/<text>")
+@app.route("/python/")
+def pthon(text="is cool"):
     """this will be called when http://0.0.0.0:5000/python/<text> or
        curl 0.0.0.0:5000/python/<text> url entered
 
