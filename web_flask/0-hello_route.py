@@ -6,6 +6,7 @@ entered it will respond
 
 from web_flask import app
 
+
 @app.route("/")
 def index():
     """this will be called when the above url entered
