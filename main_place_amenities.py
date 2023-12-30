@@ -45,6 +45,16 @@ place_2.amenities.append(amenity_1)
 place_2.amenities.append(amenity_2)
 place_2.amenities.append(amenity_3)
 
+#remove link
+
 storage.save()
 
 print("OK")
+
+#remove link
+print("place1 id {} amenity_1 id {}".format(place_1.id, amenity_1.id))
+print("place2 id {} amenity_2 id {}".format(place_2.id, amenity_2.id))
+place_1.amenities.remove(amenity_1)
+place_2.amenities.remove(amenity_2)
+
+storage.save()
