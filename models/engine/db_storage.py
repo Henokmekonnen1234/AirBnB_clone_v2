@@ -9,6 +9,7 @@ from models.city import City
 from models.user import User
 from models.place import Place
 from models.review import Review
+from models.amenity import Amenity
 from os import environ
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -58,7 +59,8 @@ class DBStorage:
                         "CITIES": City,
                         "USERS": User,
                         "PLACES": Place,
-                        "REVIEWS": Review
+                        "REVIEWS": Review,
+                        "AMENITIES": Amenity,
                       }
             all_value = {}
             result = []
@@ -68,8 +70,9 @@ class DBStorage:
                 Base.metadata.reflect(bind=self.__engine)
                 for table_name, _ in Base.metadata.tables.items():
                     table_name = table_name.upper()
-                    result.extend(self.__session.query(
-                                  classes[table_name]).all())
+                    if table_name != "PLACE_AMENITY":
+                        result.extend(self.__session.query(
+                                      classes[table_name]).all())
             if len(result) > 0:
                 for value in result:
                     key = "{}.{}".format(value.__class__.__name__,

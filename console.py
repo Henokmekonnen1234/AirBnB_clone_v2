@@ -134,10 +134,7 @@ class HBNBCommand(cmd.Cmd):
                     if type(value) == str and "_" in value:
                         value = value.replace("_", " ")
                     all_values[key] = value
-            new_instance = HBNBCommand.classes[class_name]()
-            new_dict = new_instance.to_dict()
-            new_dict = {**new_dict, **all_values}
-            new_instance = HBNBCommand.classes[class_name](**new_dict)
+            new_instance = HBNBCommand.classes[class_name](**all_values)
             storage.new(new_instance)
             storage.save()
             print(new_instance.id)

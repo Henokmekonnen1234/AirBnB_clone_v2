@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
-    name = Column(String(128), nullable=False)
+    name = Column(String(128), default="", nullable=False)
     if environ.get("HBNB_TYPE_STORAGE") == "db":
         cities = relationship("City", cascade="all,\
                               delete-orphan")
