@@ -20,6 +20,7 @@ def index():
     """
     return "{}".format("Hello HBNB!")
 
+
 @app.route("/hbnb")
 def hbnb():
     """this will be called when http://0.0.0.0:5000/hbnb or
@@ -29,6 +30,7 @@ def hbnb():
         str: this will return string value
     """
     return "{}".format("HBNB")
+
 
 @app.route("/c/<text>")
 def clang(text):
