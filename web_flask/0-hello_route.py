@@ -4,7 +4,10 @@ this file contains the url when http://0.0.0.0:5000/ or curl 0.0.0.0:5000
 entered it will respond
 """
 
-from web_flask import app
+from flask import Flask
+
+app = Flask(__name__)
+app.url_map.strict_slashes = False
 
 
 @app.route("/")
