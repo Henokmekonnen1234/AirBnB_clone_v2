@@ -90,7 +90,7 @@ def isNum(n):
 
 
 @app.route("/number_template/<n>")
-def template(n):
+def num_template(n):
     """this will be called when http://0.0.0.0:5000/number_template/<n> or
        curl 0.0.0.0:5000/number_template/<n> url entered
 
@@ -112,4 +112,4 @@ def template(n):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
