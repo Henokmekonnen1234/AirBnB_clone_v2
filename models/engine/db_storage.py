@@ -27,15 +27,15 @@ class DBStorage:
     def __init__(self):
         """initialization of instaces done in this method
         """
-       db_user = environ.get("HBNB_MYSQL_USER")
-       db_pwd = environ.get("HBNB_MYSQL_PWD")
-       db_host = environ.get("HBNB_MYSQL_HOST")
-       db_name = environ.get("HBNB_MYSQL_DB")
-       if db_user and db_pwd and db_host and db_name:
+        db_user = environ.get("HBNB_MYSQL_USER")
+        db_pwd = environ.get("HBNB_MYSQL_PWD")
+        db_host = environ.get("HBNB_MYSQL_HOST")
+        db_name = environ.get("HBNB_MYSQL_DB")
+        if db_user and db_pwd and db_host and db_name:
             mysql_url = "mysql+mysqldb://{}:{}@{}:3306/{}".format(
                          db_user, db_pwd, db_host, db_name)
             self.__engine = create_engine(mysql_url, pool_pre_ping=True)
-       if environ.get("HBNB_ENV") == "test":
+        if environ.get("HBNB_ENV") == "test":
             Base.metadata.reflect(bind=self.__engine)
             Base.metadata.drop_all(bind=self.__engine)
 
