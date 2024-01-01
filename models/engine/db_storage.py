@@ -93,7 +93,7 @@ class DBStorage:
             if obj is not None:
                 self.__session.add(obj)
         except Exception as e:
-            print("Sorry error occurred ", e)
+            print("Sorry error occurred ")
             pass
 
     def save(self):
@@ -125,7 +125,19 @@ class DBStorage:
         try:
             Base.metadata.create_all(bind=self.__engine)
             Session = scoped_session(sessionmaker(bind=self.__engine,
+            						 autocommit=False,
+                                     autoflush=False,
                                      expire_on_commit=False))
             self.__session = Session()
         except Exception as e:
             print("Sorry error occurred ", e)
+
+    def close(self):
+        """ this method will remove any session opened within or out
+            side of this class
+        """
+        #try:
+        self.__session.close()
+        #except Exception as e:
+        #    print("Sorry error occurred ", e)
+        #    pass

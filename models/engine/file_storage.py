@@ -71,3 +71,12 @@ class FileStorage:
                 del obj
         except Exception as e:
             pass
+
+    def close(self):
+        """ this method will call the reload method, which
+            deserializing the json file
+        """
+        try:
+            self.reload()
+        except Exception as e:
+            pass
