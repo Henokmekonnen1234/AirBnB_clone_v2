@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from os import environ
 from sqlalchemy import Table, Column, String, Integer, ForeignKey, Float
+from sqlalchemy import ForeignKeyConstraint
 from sqlalchemy.orm import relationship
 
 
@@ -10,9 +11,12 @@ class Place(BaseModel, Base):
     """ This class contains intances that accept values passed
         for the  Place class
     """
+    __table_args__ = ({'mysql_default_charset': 'latin1'})
     __tablename__ = "places"
-    city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
-    user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
+    city_id = Column(String(60),
+                    ForeignKey("cities.id"), nullable=False)
+    user_id = Column(String(60),
+                    ForeignKey("users.id"), nullable=False)
     name = Column(String(128), default="", nullable=False)
     description = Column(String(1024), default="", nullable=True)
     number_rooms = Column(Integer, default=0, nullable=False)
@@ -23,16 +27,15 @@ class Place(BaseModel, Base):
     longitude = Column(Float, default=0.0, nullable=False)
     amenity_ids = []
     if environ.get("HBNB_TYPE_STORAGE") == "db":
-        user = relationship("User", back_populates="places")
-        cities = relationship("City", back_populates="places")
         place_amenity = Table("place_amenity", Base.metadata,
                               Column("place_id", String(60),
                                      ForeignKey("places.id"),
                                      nullable=False),
                               Column("amenity_id", String(60),
                                      ForeignKey("amenities.id"),
-                                     nullable=False))
-        reviews = relationship("Review", back_populates="place",
+                                     nullable=False),
+                              mysql_charset="latin1",)
+        reviews = relationship("Review", backref="places",
                                cascade="all, delete-orphan")
         amenities = relationship("Amenity", secondary=place_amenity,
                                  viewonly=False)

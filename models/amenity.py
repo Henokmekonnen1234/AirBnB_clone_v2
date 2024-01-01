@@ -12,6 +12,7 @@ class Amenity(BaseModel, Base):
     """Amenty class defined below are instances of Amenty
        class
     """
+    __table_args__ = ({'mysql_default_charset': 'latin1'})
     __tablename__ = "amenities"
     name = Column(String(128), default="", nullable=False)
     if environ.get("HBNB_TYPE_STORAGE") == "db":
