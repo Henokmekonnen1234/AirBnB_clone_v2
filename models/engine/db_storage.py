@@ -66,8 +66,8 @@ class DBStorage:
             for table_name, _ in Base.metadata.tables.items():
                 table_name = table_name.upper()
                 if table_name != "PLACE_AMENITY":
-                     result.extend(self.__session.query(
-                               classes[table_name]).all())
+                    result.extend(self.__session.query(
+                                  classes[table_name]).all())
         if len(result) > 0:
             for value in result:
                 key = "{}.{}".format(value.__class__.__name__,
