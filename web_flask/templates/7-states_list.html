@@ -7,8 +7,9 @@
         <H1>States</H1>
         <UL>
 	    {% for key, value in state|dictsort(true, "value") %}
-	            <LI>{{ key|e }} <B>{{ value|e }}</B></LI>
+	            <LI>{{ key }} <B>{{ value }}</B></LI>
 	    {% endfor %}
         </UL>
     </BODY>
 </HTML>
+

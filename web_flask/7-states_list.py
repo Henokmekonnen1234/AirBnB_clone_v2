@@ -26,7 +26,7 @@ def state_list():
             state[value.id] = value.name
         return render_template("7-states_list.html", state=state)
     except Exception as e:
-        error("Error occurred")
+        error("Error occurred", e)
 
 
 @app.teardown_appcontext
