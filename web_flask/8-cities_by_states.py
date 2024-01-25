@@ -20,12 +20,10 @@ def citiesState():
     """
     try:
         state = [value for _, value in storage.all(State).items()]
-        #for _, values in storage.all(State).items():
-            #state[values.id] = values.name
-            #state["cities"] = values.cities
         return render_template("8-cities_by_states.html", state=state)
     except Exception as e:
         print("Error occured", e)
+
 
 @app.teardown_appcontext
 def teardown(error=None):
